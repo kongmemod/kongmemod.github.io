@@ -1,0 +1,13 @@
+import {esc,safeURL,dateVN,STATUSES} from './core.js';
+export const $=s=>document.querySelector(s);
+export function toast(msg){const e=$('#toast');e.textContent=msg;e.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.hidden=true,4200);}
+export function picture(url,alt,cls=''){return `<img class="${cls}" src="${esc(safeURL(url,{asset:true})||'./fallback.svg')}" alt="${esc(alt)}" loading="lazy">`;}
+export function setupImages(scope=document){scope.querySelectorAll('img').forEach(i=>{i.addEventListener('error',()=>{if(!i.src.endsWith('/fallback.svg'))i.src='./fallback.svg';},{once:true});});}
+export function setupDialog(){const d=$('#detail');d.addEventListener('click',e=>{if(e.target===d||e.target.closest('[data-close]'))d.close();});d.addEventListener('close',()=>{d.querySelectorAll('video').forEach(v=>v.pause());});}
+export function openDialog(body){$('#detail-body').innerHTML=`<button class="close icon-btn" data-close aria-label="Đóng">×</button>${body}`;setupImages($('#detail'));if(!$('#detail').open)$('#detail').showModal();}
+export function itemDetails(x,{preview=true,action=true}={}){
+ const media=preview&&x.preview_enabled?x.preview_media:[];
+ return `<p class="eyebrow">${esc(x.platform.toUpperCase())} / ${esc(STATUSES[x.status])}</p><h2>${esc(x.title)}</h2><p class="prewrap muted">${esc(x.description)}</p>${media.length?`<div class="gallery">${media.map((m,n)=>m.type==='video'?`<video controls playsinline preload="metadata" src="${esc(safeURL(m.url))}" aria-label="Video preview ${n+1}"></video>`:picture(m.url,'Preview '+(n+1))).join('')}</div>`:'<div class="preview-empty">'+picture(x.image,x.title)+'<span>Chưa có nội dung preview cho mục này.</span></div>'}${x.changelog?`<h3>Có gì mới?</h3><p class="prewrap">${esc(x.changelog)}</p>`:''}${x.updated_at?`<p class="tiny muted">Cập nhật ${dateVN(x.updated_at)}</p>`:''}${x.status!=='ready'?`<p class="notice">${esc(x.maintenance_message||'Phiên bản hiện chưa sẵn sàng.')}</p>`:action?`<a class="primary full" href="${esc(safeURL(x.url))}" target="_blank" rel="noopener noreferrer">${x.kind==='key'?'Mở trang lấy key':x.kind==='guide'?'Xem hướng dẫn':'Mở link tải'} ↗</a>`:''}`;
+}
+export function initTheme(defaultMode='dark'){let mode=defaultMode;try{mode=localStorage.getItem('kong.theme')||defaultMode;}catch{}document.documentElement.dataset.theme=mode;$('#theme')?.addEventListener('click',()=>{const m=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=m;try{localStorage.setItem('kong.theme',m);}catch{}});}
+export function bindSafeLinks(scope=document){scope.querySelectorAll('a[target="_blank"]').forEach(a=>a.rel='noopener noreferrer');}

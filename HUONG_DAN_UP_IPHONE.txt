@@ -1,0 +1,11 @@
+BẢN CHỈ CÓ FILE RỜI — KHÔNG CẦN UPLOAD THƯ MỤC XANH
+
+1. Giải nén ZIP mới rồi mở thư mục vừa giải nén.
+2. Chọn các file bên trong để upload vào repository cũ, cùng chỗ với index.html.
+3. Chọn toàn bộ file; không chọn nguyên ZIP hoặc thư mục.
+4. Commit changes, chờ GitHub cập nhật và mở lại web.
+5. Không đổi tên hoặc làm mất đuôi .html/.js/.css/.json/.jpeg/.svg.
+
+Ảnh và mã nguồn đều nằm ngang hàng. Chỉ upload index.html sẽ không đủ: hãy chọn tất cả file trong bản này.
+
+Trang chủ chạy ngay. Admin đăng nhập thật cần cấu hình Supabase một lần theo README.md. Nếu dùng hosting riêng, up các file vào thư mục website hosting yêu cầu và bật HTTPS.
